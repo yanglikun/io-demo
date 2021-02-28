@@ -7,7 +7,6 @@
 #include <netinet/in.h>
 #include <arpa/inet.h>
 #include <sys/select.h>
-#include <ctype.h>
 #include <unistd.h>
 #include <fcntl.h>
 #include <sys/errno.h>
@@ -55,7 +54,7 @@ int main(int argc, char *argv[]) {
     //监听端口：修改lfd为被动socket，20是backlog的大小
     listen(listenFD, 20);
 
-    printf("开始接收连接....listenFD:%d\n", listenFD);
+    printf("select.开始接收连接....listenFD:%d\n", listenFD);
 
     fd_set allFDs;//所有需要监听的fd集合
     FD_ZERO(&allFDs);
@@ -113,7 +112,7 @@ int main(int argc, char *argv[]) {
                     FD_CLR(curFD, &allFDs);
                     close(curFD);
                     printf("连接关闭.curFD:%d\n", curFD);
-                } else {//接收到数据
+                } else {//接收到数据，写入客户端
                     write(curFD, buf, readBytes);
                 }
             }
