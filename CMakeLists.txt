@@ -13,6 +13,7 @@ IF (UNIX)
     add_executable(select src/multiplexing/selectServer.c)
     add_executable(poll src/multiplexing/pollServer.c)
     add_executable(epoll src/multiplexing/epollServer.c)
+    add_executable(serverET src/multiplexing/epollETLT.c)
 ENDIF ()
 
 IF (WIN32)

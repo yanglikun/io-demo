@@ -15,6 +15,8 @@
 #pragma clang diagnostic push
 #pragma ide diagnostic ignored "EndlessLoop"
 
+#define READ_BUF_SIZE 4
+
 int main() {
     //初始化 服务器端socket
     int listenFD = socket(AF_INET, SOCK_STREAM, 0);
@@ -100,7 +102,7 @@ int main() {
                     perror("设置connFD非阻塞失败");
                 }
                 event.data.fd = connfd;
-                event.events = EPOLLIN;
+                event.events = EPOLLIN | EPOLLET; //默认是LT 水平触发
                 if (epoll_ctl(epollFD, EPOLL_CTL_ADD, connfd, &event) < 0) {
                     perror("添加connFD到epoll失败");
                     close(connfd);
@@ -108,8 +110,9 @@ int main() {
                 }
             } else {
                 int curFD = events[i].data.fd;
-                char buf[1024] = "";
-                int readBytes = read(curFD, buf, 1024);
+                char buf[READ_BUF_SIZE] = "";
+                int readBytes = read(curFD, buf, READ_BUF_SIZE);
+                printf("读取到字节数:%d\n", readBytes);
                 if (readBytes < 0) {
                     if (EWOULDBLOCK == errno || EAGAIN == errno) {//非阻塞IO，缓冲区没数据
                         printf("缓冲区没有数据.continue. errno:%d\n", errno);
