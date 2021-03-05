@@ -102,7 +102,8 @@ int main() {
                     perror("设置connFD非阻塞失败");
                 }
                 event.data.fd = connfd;
-                event.events = EPOLLIN | EPOLLET; //默认是LT 水平触发
+//                event.events = EPOLLIN | EPOLLET; //默认是LT 水平触发
+                event.events = EPOLLIN; //默认是LT 水平触发
                 if (epoll_ctl(epollFD, EPOLL_CTL_ADD, connfd, &event) < 0) {
                     perror("添加connFD到epoll失败");
                     close(connfd);
