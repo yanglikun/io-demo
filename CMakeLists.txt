@@ -1,10 +1,6 @@
 cmake_minimum_required(VERSION 3.15)
 project(io_demo C)
 
-#如果乱码，可以尝试放开注释
-#set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -fexec-charset=gbk")
-#set(CMAKE_C_FLAGS "${CMAKE_CXX_FLAGS} -Wall -fexec-charset=gbk")
-
 set(CMAKE_C_STANDARD 99)
 IF (APPLE)
     MESSAGE("apple.....")
@@ -30,6 +26,10 @@ ELSEIF(UNIX)
     add_executable(epoll src/multiplexing/epollServer.c)
     add_executable(serverET src/multiplexing/epollETLT.c)
 ELSEIF(WIN32)
-    MESSAGE("unix.....")
+    MESSAGE("win32.....")
+    #如果乱码，可以尝试放开或关闭注释
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -fexec-charset=gbk")
+    set(CMAKE_C_FLAGS "${CMAKE_CXX_FLAGS} -Wall -fexec-charset=gbk")
+    link_libraries(wsock32 ws2_32)
     add_executable(iocp src/multiplexing/IOCPServer.c)
 ENDIF()
